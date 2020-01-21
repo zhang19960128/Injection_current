@@ -17,6 +17,7 @@ int main(){
     ss>>bandnumber;
     ss>>bandnumber;
   }
+  fs.close();
   std::cout<<"the kpoints are: "<<kpoints<<" the band numbers are:  "<<bandnumber<<std::endl;
   double*** kpoint_product=new double** [3];
   for(size_t i=0;i<3;i++){
@@ -24,10 +25,23 @@ int main(){
   }
   for(size_t i=0;i<3;i++){
     for(size_t j=0;j<kpoints;j++){
-      kpoint_product[i][j]=new double[bandnumber*(bandnumber-1)/2];
+      kpoint_product[i][j]=new double[bandnumber*(bandnumber-1)/2*2];
     }
   }
-  
+  fs.open("pmat.dat",std::fstream::in);
+  int m,n;
+  while(getline(fs,temp)){
+    ss.clear();
+    ss.str(temp);
+    ss>>kpoints;
+    ss>>m;
+    ss>>n;
+    for(size_t i=0;i<3;i++){
+       ss>>kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)*2];
+       ss>>kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)*2+1];
+    }
+  }
+  fs.close();
   /*deallocate memory*/
   for(size_t i=0;i<3;i++){
     for(size_t j=0;j<kpoints;j++){
