@@ -4,9 +4,9 @@ LIBPATH+=
 vpath %.cpp src
 vpath %.h include
 vpath %.o obj
-INJECTION: main.o constant.o
+INJECTION: main.o constant.o indexref.o
 	mkdir -p obj bin
-	$(CXX) -o INJECTION $(LIBPATH) main.o constant.o
+	$(CXX) -o injection $(LIBPATH) main.o constant.o indexref.o
 	mv *o bin/
 %.o:%.c $(DEPS)
 	$(CXX) $(CXXFLAGS) -c -o $@ $^
