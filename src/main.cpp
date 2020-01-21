@@ -27,6 +27,7 @@ int main(){
       kpoint_product[i][j]=new double[bandnumber*(bandnumber-1)/2];
     }
   }
+  
   /*deallocate memory*/
   for(size_t i=0;i<3;i++){
     for(size_t j=0;j<kpoints;j++){
