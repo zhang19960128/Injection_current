@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "readqebands.h"
 #include "indexref.h"
 int main(){
   std::fstream fs;
@@ -26,8 +27,9 @@ int main(){
     bands[i]=new double[bandnumber];
     occupation[i]=new double[bandnumber];
   }
-  readbands(bands,kpints,bandnumber,"out_scf");
-  for(size_t i=0;i<3;i++){
+  readbands(bands,kpoints,bandnumber,"out_nscf");
+  readoccupation(occupation,kpoints,bandnumber,"out_nscf");
+    for(size_t i=0;i<3;i++){
     kpoint_product[i]=new double* [kpoints];
   }
   for(size_t i=0;i<3;i++){
