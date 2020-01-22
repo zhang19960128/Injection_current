@@ -1,4 +1,5 @@
 #include "readqebands.h"
+#include "constant.h"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -33,6 +34,7 @@ void readoccupation(double** occupationnumber,int kpoints,int bandnumber,std::st
       count=count+1;
     }
   }
+  fs.close();
 }
 void readvmatrix(double*** kpoint_product,int kpoints,int bandnumber,std::string pmat){
  std::fstream fs;
@@ -52,4 +54,54 @@ void readvmatrix(double*** kpoint_product,int kpoints,int bandnumber,std::string
    }
  }
 fs.close();
+}
+void readkpoints(double** kpoints,int kpoints_count,std::string outnscf){
+  std::fstream fs;
+  fs.open(outnscf.c_str(),std::fstream::in);
+  std::string temp;
+  std::stringstream ss;
+  std::string useless;
+  double kx,ky,kz;
+  double alat;
+  while(getline(fs,temp)){
+    if(temp.find("lattice parameter (alat)")!=std::string::npos){
+      ss.str(temp);
+      for(size_t i=0;i<4;i++){
+      ss>>useless;
+      }
+      ss>>alat;
+    }
+    if(temp.find("cart. coord. in units 2pi/alat")!=std::string::npos){
+    for(size_t i=0;i<kpoints_count;i++){
+        getline(fs,temp);
+        ss.clear();
+        ss.str(temp);
+        for(size_t j=0;j<4;j++){
+          ss>>useless;
+        }
+        ss>>kx;
+        ss>>ky;
+        ss>>kz;
+        kpoints[i][0]=kx*2*sci_const::PI/(alat*sci_const::rbohr);
+        kpoints[i][1]=ky*2*sci_const::PI/(alat*sci_const::rbohr);
+        kpoints[i][2]=kz*2*sci_const::PI/(alat*sci_const::rbohr);
+      }
+    }
+  }
+  fs.close();
+}
+void readdimension(int& kpoints,int& bandnumber,std::string pmat){
+  std::fstream fs;
+  fs.open(pmat.c_str(),std::fstream::in);
+  std::string temp;
+  std::stringstream ss;
+  while(getline(fs,temp)){
+    ss.clear();
+    ss.str(temp);
+    ss>>kpoints;
+    ss>>bandnumber;
+    ss>>bandnumber;
+  }
+  fs.close();
+  std::cout<<"the kpoints are: "<<kpoints<<"the band numbers are: "<<bandnumber<<std::endl;
 }

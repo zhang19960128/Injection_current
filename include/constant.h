@@ -4,5 +4,7 @@ namespace sci_const{
 extern double e_q;
 extern double e_mass;
 extern double hbar;
+extern double rbohr;
+extern double PI;
 }
 #endif
