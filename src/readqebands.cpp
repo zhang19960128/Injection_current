@@ -55,7 +55,7 @@ void readvmatrix(double*** kpoint_product,int kpoints,int bandnumber,std::string
  }
 fs.close();
 }
-void readkpoints(double** kpoints,int kpoints_count,std::string outnscf){
+void readkpoints(double** kpoints,double* kweight,int kpoints_count,std::string outnscf){
   std::fstream fs;
   fs.open(outnscf.c_str(),std::fstream::in);
   std::string temp;
@@ -85,6 +85,10 @@ void readkpoints(double** kpoints,int kpoints_count,std::string outnscf){
         kpoints[i][0]=kx*2*sci_const::PI/(alat*sci_const::rbohr);
         kpoints[i][1]=ky*2*sci_const::PI/(alat*sci_const::rbohr);
         kpoints[i][2]=kz*2*sci_const::PI/(alat*sci_const::rbohr);
+        ss>>useless;
+        ss>>useless;
+        ss>>useless;
+        ss>>kweight[i];
       }
     }
   }
