@@ -14,6 +14,6 @@ double Ay=0;
 double Az=1;
 double delta=1.5707963265;
 }
-namespace gassian{
+namespace gaussian{
 double smearing=2.9*1e9;//10cm^-1;
 }

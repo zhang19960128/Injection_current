@@ -26,7 +26,7 @@ int main(){
   }
   for(size_t i=0;i<3;i++){
     for(size_t j=0;j<kpointscount;j++){
-      kpoint_product[i][j]=new double[bandnumber*(bandnumber-1)/2*2];
+      kpoint_product[i][j]=new double[bandnumber*(bandnumber+1)/2*2];
     }
   }
   readbands(bands,kpointscount,bandnumber,"out_nscf");

@@ -16,7 +16,7 @@ extern double Ay;
 extern double Az;
 extern double delta;
 }
-namespace gassian{
+namespace gaussian{
 extern double smearing;
 }
 #endif
