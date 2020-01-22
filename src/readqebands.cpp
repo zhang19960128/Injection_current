@@ -55,7 +55,7 @@ void readvmatrix(double*** kpoint_product,int kpoints,int bandnumber,std::string
  }
 fs.close();
 }
-void readkpoints(double** kpoints,double* kweight,int kpoints_count,std::string outnscf){
+void readkpoints(double** kpoints,double* kweight,int kpoints_count,double& volume,std::string outnscf){
   std::fstream fs;
   fs.open(outnscf.c_str(),std::fstream::in);
   std::string temp;
@@ -65,11 +65,23 @@ void readkpoints(double** kpoints,double* kweight,int kpoints_count,std::string 
   double alat;
   while(getline(fs,temp)){
     if(temp.find("lattice parameter (alat)")!=std::string::npos){
+    ss.clear();
       ss.str(temp);
       for(size_t i=0;i<4;i++){
       ss>>useless;
       }
       ss>>alat;
+    }
+    if(temp.find("unit-cell volume")!=std::string::npos){
+    ss.clear();
+    ss.str(temp);
+    ss>>useless;
+    ss>>useless;
+    ss>>useless;
+    ss>>volume;
+    volume=volume*sci_const::rbohr*sci_const::rbohr*sci_const::rbohr;
+    std::cout<<"the volume is: "<<volume<<std::endl;
+    ss.clear();
     }
     if(temp.find("cart. coord. in units 2pi/alat")!=std::string::npos){
     for(size_t i=0;i<kpoints_count;i++){

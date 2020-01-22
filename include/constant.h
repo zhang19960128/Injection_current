@@ -6,5 +6,17 @@ extern double e_mass;
 extern double hbar;
 extern double rbohr;
 extern double PI;
+extern double root2;
+extern double rootpi;
+extern double ev2j;
+}
+namespace light{
+extern double Ax;
+extern double Ay;
+extern double Az;
+extern double delta;
+}
+namespace gassian{
+extern double smearing;
 }
 #endif

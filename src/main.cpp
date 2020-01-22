@@ -13,6 +13,7 @@ int main(){
   double** occupation=new double* [kpointscount];
   double** kpoints=new double* [kpointscount];
   double* kweight=new double [kpointscount];
+  double volume;
   for(size_t i=0;i<kpointscount;i++){
   kpoints[i]=new double[3];
   }
@@ -29,7 +30,7 @@ int main(){
     }
   }
   readbands(bands,kpointscount,bandnumber,"out_nscf");
-  readkpoints(kpoints,kweight,kpointscount,"out_nscf");
+  readkpoints(kpoints,kweight,kpointscount,volume,"out_nscf");
   readoccupation(occupation,kpointscount,bandnumber,"out_nscf");
   readvmatrix(kpoint_product,kpointscount,bandnumber,"pmat.dat");
   /*deallocate memory*/
