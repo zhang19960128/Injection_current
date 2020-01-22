@@ -27,9 +27,7 @@ int main(){
     bands[i]=new double[bandnumber];
     occupation[i]=new double[bandnumber];
   }
-  readbands(bands,kpoints,bandnumber,"out_nscf");
-  readoccupation(occupation,kpoints,bandnumber,"out_nscf");
-    for(size_t i=0;i<3;i++){
+  for(size_t i=0;i<3;i++){
     kpoint_product[i]=new double* [kpoints];
   }
   for(size_t i=0;i<3;i++){
@@ -37,20 +35,9 @@ int main(){
       kpoint_product[i][j]=new double[bandnumber*(bandnumber-1)/2*2];
     }
   }
-  fs.open("pmat.dat",std::fstream::in);
-  int m,n;
-  while(getline(fs,temp)){
-    ss.clear();
-    ss.str(temp);
-    ss>>kpoints;
-    ss>>m;
-    ss>>n;
-    for(size_t i=0;i<3;i++){
-       ss>>kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)*2];
-       ss>>kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)*2+1];
-    }
-  }
-  fs.close();
+  readbands(bands,kpoints,bandnumber,"out_nscf");
+  readoccupation(occupation,kpoints,bandnumber,"out_nscf");
+  readvmatrix(kpoint_product,kpoints,bandnumber,"pmat.dat");
   /*deallocate memory*/
   for(size_t i=0;i<kpoints;i++){
     delete [] bands[i];
