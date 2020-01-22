@@ -20,6 +20,13 @@ int main(){
   fs.close();
   std::cout<<"the kpoints are: "<<kpoints<<" the band numbers are:  "<<bandnumber<<std::endl;
   double*** kpoint_product=new double** [3];
+  double** bands=new double* [kpoints];
+  double** occupation=new double* [kpoints];
+  for(size_t i=0;i<kpoints;i++){
+    bands[i]=new double[bandnumber];
+    occupation[i]=new double[bandnumber];
+  }
+  readbands(bands,kpints,bandnumber,"out_scf");
   for(size_t i=0;i<3;i++){
     kpoint_product[i]=new double* [kpoints];
   }
@@ -43,6 +50,10 @@ int main(){
   }
   fs.close();
   /*deallocate memory*/
+  for(size_t i=0;i<kpoints;i++){
+    delete [] bands[i];
+    delete [] occupation[i];
+  }
   for(size_t i=0;i<3;i++){
     for(size_t j=0;j<kpoints;j++){
       delete [] kpoint_product[i][j];
