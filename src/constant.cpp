@@ -7,6 +7,7 @@ double PI=3.141592653;
 double root2=1.41421356237;
 double rootpi=1.77245385091;
 double ev2j=1.60218*1e-19;
+double hztocm=2.9*1e10;
 }
 namespace light{
 double Ax=1;

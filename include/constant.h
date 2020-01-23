@@ -9,6 +9,7 @@ extern double PI;
 extern double root2;
 extern double rootpi;
 extern double ev2j;
+extern double hztocm;
 }
 namespace light{
 extern double Ax;

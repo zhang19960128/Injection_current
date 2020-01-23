@@ -15,6 +15,7 @@ void readbands(double** bands,int kpoints,int bandnumber,std::string nscf){
       getline(fs,temp);
       for(size_t i=0;i<bandnumber;i++){
         fs>>bands[count][i];
+        bands[count][i]=bands[count][i]/sci_const::ev2j;
       }
       count=count+1;
     }

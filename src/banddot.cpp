@@ -60,6 +60,28 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   delete [] P11;
   return result;
 }
+double* sumbands(int kpointstotal,int bandstotal,double volume,double*** kpointsproduct,double** occupation,double** bands,double* kweight,double freq){
+   double* totalsum=new double[3];
+   for(size_t i=0;i<3;i++){
+    totalsum[i]=0.0;
+   }
+   double* tempsum;
+   /*sum over kpoints*/
+   for(size_t i=0;i<kpointstotal;i++){
+    /*sum over n1*/
+    for(size_t j=0;j<bandstotal;j++){
+    /*sum over n2*/
+      for(size_t k=0;k<bandstotal;k++){
+          tempsum=bandot(i,i,j,k,volume,bandstotal,kpointsproduct,occupation,bands,kweight,freq);
+          for(size_t m=0;m<3;m++){
+            totalsum[m]=totalsum[m]+tempsum[m];
+          }
+          delete [] tempsum;
+      }
+    }
+   }
+   return totalsum;
+}
 /*here the smearing represent the sigma, f(x)=1/(sqrt(2*PI)*sigma)*exp(-1/2*((x-center)/sigma)^2)*/
 double smearing(double input,double center,double smearing){
   double result=0.0;
