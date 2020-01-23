@@ -5,6 +5,7 @@
 #include <iostream>
 #include "readqebands.h"
 #include "indexref.h"
+#include "banddot.h"
 int main(){
   int kpointscount,bandnumber;
   readdimension(kpointscount,bandnumber,"pmat.dat");
