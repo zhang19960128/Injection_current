@@ -37,12 +37,13 @@ void readoccupation(double** occupationnumber,int kpoints,int bandnumber,std::st
   }
   fs.close();
 }
-void readvmatrix(double*** kpoint_product,int kpoints,int bandnumber,std::string pmat){
+void readvmatrix(std::complex<double>*** kpoint_product,int kpoints,int bandnumber,std::string pmat){
  std::fstream fs;
  std::stringstream ss;
  fs.open(pmat.c_str(),std::fstream::in);
  std::string temp;
  int m,n;
+ double temp_double;
  while(getline(fs,temp)){
    ss.clear();
    ss.str(temp);
@@ -50,8 +51,10 @@ void readvmatrix(double*** kpoint_product,int kpoints,int bandnumber,std::string
    ss>>m;
    ss>>n;
    for(size_t i=0;i<3;i++){
-      ss>>kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)*2];
-      ss>>kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)*2+1];
+    ss>>temp_double;
+    kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)].real(temp_double);
+    ss>>temp_double;
+    kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)].imag(temp_double);
    }
  }
 fs.close();

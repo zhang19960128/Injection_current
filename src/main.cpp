@@ -3,13 +3,14 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <complex>
 #include "readqebands.h"
 #include "indexref.h"
 #include "banddot.h"
 int main(){
   int kpointscount,bandnumber;
   readdimension(kpointscount,bandnumber,"pmat.dat");
-  double*** kpoint_product=new double** [3];
+  std::complex<double>*** kpoint_product=new std::complex<double>** [3];
   double** bands=new double* [kpointscount];
   double** occupation=new double* [kpointscount];
   double** kpoints=new double* [kpointscount];
@@ -23,11 +24,11 @@ int main(){
     occupation[i]=new double[bandnumber];
   }
   for(size_t i=0;i<3;i++){
-    kpoint_product[i]=new double* [kpointscount];
+    kpoint_product[i]=new std::complex<double>* [kpointscount];
   }
   for(size_t i=0;i<3;i++){
     for(size_t j=0;j<kpointscount;j++){
-      kpoint_product[i][j]=new double[bandnumber*(bandnumber+1)/2*2];
+      kpoint_product[i][j]=new std::complex<double>[bandnumber*(bandnumber+1)/2];
     }
   }
   readbands(bands,kpointscount,bandnumber,"out_nscf");
@@ -35,7 +36,7 @@ int main(){
   readoccupation(occupation,kpointscount,bandnumber,"out_nscf");
   readvmatrix(kpoint_product,kpointscount,bandnumber,"pmat.dat");
   double* current_rate;
-  current_rate=sumbands(kpointscount,bandnumber,volume,kpoint_product,occupation,bands,kweight,2.0/sci_const::ev2j/sci_const::hbar);
+  current_rate=sumbands(kpointscount,bandnumber,volume,kpoint_product,occupation,bands,kweight,3.8/sci_const::ev2j/sci_const::hbar);
   std::cout<<current_rate[0]<<" "<<current_rate[1]<<" "<<current_rate[2]<<std::endl;
   /*deallocate memory*/
   for(size_t i=0;i<kpointscount;i++){
