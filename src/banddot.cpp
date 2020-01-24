@@ -6,7 +6,9 @@
 #include <complex>
 double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double* kweight,double freq){
   double sci=(sci_const::e_q/sci_const::e_mass)*(sci_const::e_q/sci_const::hbar/sci_const::e_mass)*(sci_const::e_q/sci_const::hbar/sci_const::e_mass);
+  std::cout<<"the sci is: "<<sci<<std::endl;
   double prod=sci*kweight[kindex1]*(2*sci_const::PI)*(2*sci_const::PI)*(2*sci_const::PI)/volume*kweight[kindex2]*(2*sci_const::PI)*(2*sci_const::PI)*(2*sci_const::PI)/volume;
+  std::cout<<"Now the Prod is: "<<prod<<std::endl;
   prod=prod*(occupation[kindex1][bandnum1]-occupation[kindex2][bandnum2])*(-2)*sci_const::PI;
   double omega1=bands[kindex1][bandnum1]/sci_const::hbar;
   double omega2=bands[kindex2][bandnum2]/sci_const::hbar;
@@ -33,14 +35,15 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   /*u=+1*/
   double* result1=new double[3];
   std::complex<double> tempcomplex;
-  double resultplus=prod*smearing(freq,-(omega2-omega1),gaussian::smearing);
+  double resultplus=prod*smearing(freq,-(omega2-omega1),gaussian::smearing_ev);
+  //std::cout<<prod<<" "<<smearing(freq,-(omega2-omega1),gaussian::smearing_ev)<<std::endl;
   for(size_t i=0;i<3;i++){
     tempcomplex=std::complex<double>(0,1.0)*(1.0)*sin(light::delta)*light::Ax*light::Az*(P12[0]*P21[2]-P21[0]*P12[2]);
     result1[i]=resultplus*tempcomplex.real()*P11[i].real();
   }
   /*u=-1*/
   double* result2=new double[3];
-  resultplus=prod*smearing(freq,(omega2-omega1),gaussian::smearing);
+  resultplus=prod*smearing(freq,(omega2-omega1),gaussian::smearing_ev);
   for(size_t i=0;i<3;i++){
     tempcomplex=std::complex<double>(0,1.0)*(-1.0)*sin(light::delta)*light::Ax*light::Az*(P12[0]*P21[2]-P21[0]*P12[2]);
     result2[i]=resultplus*tempcomplex.real()*P11[i].real();

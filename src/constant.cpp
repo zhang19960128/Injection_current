@@ -17,4 +17,5 @@ double delta=1.5707963265;
 }
 namespace gaussian{
 double smearing=2.9*1e9;//10cm^-1;
+double smearing_ev=0.1*sci_const::ev2j/sci_const::hbar;
 }

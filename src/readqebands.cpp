@@ -15,7 +15,7 @@ void readbands(double** bands,int kpoints,int bandnumber,std::string nscf){
       getline(fs,temp);
       for(size_t i=0;i<bandnumber;i++){
         fs>>bands[count][i];
-        bands[count][i]=bands[count][i]/sci_const::ev2j;
+        bands[count][i]=bands[count][i]*sci_const::ev2j;
       }
       count=count+1;
     }
@@ -53,6 +53,8 @@ void readvmatrix(std::complex<double>*** kpoint_product,int kpoints,int bandnumb
    for(size_t i=0;i<3;i++){
     ss>>temp_double;
     kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)].real(temp_double);
+   }
+   for(size_t i=0;i<3;i++){
     ss>>temp_double;
     kpoint_product[i][kpoints-1][findindex(m-1,n-1,bandnumber)].imag(temp_double);
    }
