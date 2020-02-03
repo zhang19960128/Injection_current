@@ -6,10 +6,12 @@
 #include <complex>
 double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double* kweight,double freq){
   /*Please refer to my OneNote math constant.*/
+  if(kindex1!=kindex2){
+  return 0.0;
+  }
   double sci=(sci_const::e_q/sci_const::e_mass);
   sci=sci*sci*sci*(sci_const::hbar)*(sci_const::hbar)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat);
   sci=sci*(sci_const::hbar)*sci_const::hbar/sci_const::ev2j/sci_const::ev2j;
-  std::cout<<"the sci constant now is: "<<sci*1.0/volume<<std::endl;
   double prod=sci*1.0/volume*kweight[kindex2];
   prod=prod*(occupation[kindex1][bandnum1]-occupation[kindex2][bandnum2])*(-2)*sci_const::PI;
   double omega1=bands[kindex1][bandnum1];
