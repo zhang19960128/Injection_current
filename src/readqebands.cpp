@@ -15,7 +15,7 @@ void readbands(double** bands,int kpoints,int bandnumber,std::string nscf){
       getline(fs,temp);
       for(size_t i=0;i<bandnumber;i++){
         fs>>bands[count][i];
-        bands[count][i]=bands[count][i]*sci_const::ev2j;
+        bands[count][i]=bands[count][i];
       }
       count=count+1;
     }
@@ -77,6 +77,7 @@ void readkpoints(double** kpoints,double* kweight,int kpoints_count,double& volu
       ss>>useless;
       }
       ss>>alat;
+      sci_const::alat=alat*sci_const::rbohr;
     }
     if(temp.find("unit-cell volume")!=std::string::npos){
     ss.clear();
@@ -85,7 +86,7 @@ void readkpoints(double** kpoints,double* kweight,int kpoints_count,double& volu
     ss>>useless;
     ss>>useless;
     ss>>volume;
-    volume=volume*sci_const::rbohr*sci_const::rbohr*sci_const::rbohr;
+    volume=volume*sci_const::rbohr*sci_const::rbohr*sci_const::rbohr/sci_const::alat/sci_const::alat/sci_const::alat;
     std::cout<<"the volume is: "<<volume<<std::endl;
     ss.clear();
     }
@@ -100,9 +101,9 @@ void readkpoints(double** kpoints,double* kweight,int kpoints_count,double& volu
         ss>>kx;
         ss>>ky;
         ss>>kz;
-        kpoints[i][0]=kx*2*sci_const::PI/(alat*sci_const::rbohr);
-        kpoints[i][1]=ky*2*sci_const::PI/(alat*sci_const::rbohr);
-        kpoints[i][2]=kz*2*sci_const::PI/(alat*sci_const::rbohr);
+        kpoints[i][0]=kx;
+        kpoints[i][1]=ky;
+        kpoints[i][2]=kz;
         ss>>useless;
         ss>>useless;
         ss>>useless;

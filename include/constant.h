@@ -10,14 +10,20 @@ extern double root2;
 extern double rootpi;
 extern double ev2j;
 extern double hztocm;
+extern double alat;
 }
 namespace light{
+extern double illumination;
+extern double delta;
+extern double mwpercmsq2E;
+extern double Eamp;
+extern double freq;
 extern double Ax;
 extern double Ay;
 extern double Az;
-extern double delta;
 }
 namespace gaussian{
-extern double smearing;
+extern double smearing_hertz;
+extern double smearing_ev;
 }
 #endif
