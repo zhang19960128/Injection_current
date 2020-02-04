@@ -8,3 +8,4 @@ legend("xxz","yxz","zxz")
 xlabel("Photon Energy(ev)");
 ylabel("Susceptibility(A/V^2)")
 set(gca,"FontSize",26)
+saveas(gcf,'BTO.eps','epsc')
