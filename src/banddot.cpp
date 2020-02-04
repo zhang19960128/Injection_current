@@ -7,10 +7,14 @@
 double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double* kweight,double freq){
   /*Please refer to my OneNote math constant.*/
   double sci=(sci_const::e_q/sci_const::e_mass);
-  sci=sci*sci*sci*(sci_const::hbar)*(sci_const::hbar)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat);
-  double prod=sci*1.0/volume*kweight[kindex2]/(sci_const::ev2j/sci_const::hbar)/(sci_const::ev2j/sci_const::hbar);
-  prod=sci_const::ev2j*prod;/*this one is to convert the unit in delta function ev to J*/
+  sci=sci*sci*sci/sci_const::hbar/sci_const::hbar;
+  /*velocity matrix units*/
+  sci=sci*(sci_const::hbar)*(sci_const::hbar)*(sci_const::hbar)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat);
   /*Integration over dk'*/
+  sci=sci*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)/volume*kweight[kindex2];
+  double prod=sci/(sci_const::ev2j/sci_const::hbar)/(sci_const::ev2j/sci_const::hbar);
+  prod=sci_const::hbar*sci_const::ev2j*prod;/*this one is to convert the unit in delta function from w to ev to J*/
+  /*Integration over dk''*/
   prod=prod*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)/volume*kweight[kindex1];
   prod=prod*(occupation[kindex1][bandnum1]-occupation[kindex2][bandnum2])*(-2)*sci_const::PI*light::time;
   double omega1=bands[kindex1][bandnum1];
