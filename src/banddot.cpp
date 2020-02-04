@@ -11,11 +11,13 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   /*velocity matrix units*/
   sci=sci*(sci_const::hbar)*(sci_const::hbar)*(sci_const::hbar)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat);
   /*Integration over dk'*/
-  sci=sci*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)/volume*kweight[kindex2];
+  sci=sci*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)/volume;
   double prod=sci/freq/freq/(sci_const::ev2j/sci_const::hbar)/(sci_const::ev2j/sci_const::hbar);
   prod=sci_const::hbar*sci_const::ev2j*prod;/*this one is to convert the unit in delta function from w to ev to J*/
   /*Integration over dk''*/
-  prod=prod*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)/volume*kweight[kindex1];
+  prod=prod*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)/volume;
+  /*time the band weight*/
+  prod=prod*kweight[kindex1];
   prod=prod*(occupation[kindex1][bandnum1]-occupation[kindex2][bandnum2])*(-2)*sci_const::PI*light::time;
   double omega1=bands[kindex1][bandnum1];
   double omega2=bands[kindex2][bandnum2];
