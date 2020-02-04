@@ -18,14 +18,14 @@ double delta=1.5707963265;
 /*get the Efield amplitude by E=sqrt(I)*3772.426135064461,refer to the notes in OneNote*/
 double mwpercmsq2E=3772.426135064461;
 double Eamp=mwpercmsq2E*sqrt(illumination);/*SI units*/
-double photonE=3.0;/*ev*/
+double photonE=3.45;/*ev*/
 double freq=photonE*sci_const::ev2j/sci_const::hbar;/*SI units*/
 double Ax=Eamp/freq;/*SI units*/
 double Ay=0;
 double Az=Eamp/freq;/*SI units*/
-double time=1e-11;/*10ps*/
+double time=1e-12;/*1ps*/
 }
 namespace gaussian{
 double smearing_hertz=0.1*sci_const::ev2j/sci_const::hbar;
-double smearing_ev=0.3;/*ev*/
+double smearing_ev=0.1;/*ev*/
 }

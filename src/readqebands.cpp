@@ -125,5 +125,4 @@ void readdimension(int& kpoints,int& bandnumber,std::string pmat){
     ss>>bandnumber;
   }
   fs.close();
-  std::cout<<"the kpoints are: "<<kpoints<<"the band numbers are: "<<bandnumber<<std::endl;
 }

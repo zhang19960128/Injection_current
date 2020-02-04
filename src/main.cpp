@@ -36,8 +36,10 @@ int main(){
   readoccupation(occupation,kpointscount,bandnumber,"out_nscf");
   readvmatrix(kpoint_product,kpointscount,bandnumber,"pmat.dat");
   double* current_rate;
-  current_rate=sumbands(kpointscount,bandnumber,volume,kpoint_product,occupation,bands,kweight,light::photonE);
-  std::cout<<current_rate[0]<<" "<<current_rate[1]<<" "<<current_rate[2]<<std::endl;
+  for(double photonE=2.0;photonE<8.0;photonE=photonE+0.1){
+  current_rate=sumbands(kpointscount,bandnumber,volume,kpoint_product,occupation,bands,kweight,photonE);
+  std::cout<<photonE<<" "<<current_rate[0]<<" "<<current_rate[1]<<" "<<current_rate[2]<<std::endl;
+  }
   /*deallocate memory*/
   for(size_t i=0;i<kpointscount;i++){
     delete [] bands[i];
