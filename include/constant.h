@@ -22,6 +22,7 @@ extern double freq;
 extern double Ax;
 extern double Ay;
 extern double Az;
+extern double time;
 }
 namespace gaussian{
 extern double smearing_hertz;
