@@ -6,9 +6,6 @@
 #include <complex>
 double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double* kweight,double freq){
   /*Please refer to my OneNote math constant.*/
-  if(kindex1!=kindex2){
-  return 0.0;
-  }
   double sci=(sci_const::e_q/sci_const::e_mass);
   sci=sci*sci*sci*(sci_const::hbar)*(sci_const::hbar)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat);
   sci=sci*(sci_const::hbar)*sci_const::hbar/sci_const::ev2j/sci_const::ev2j;
@@ -39,22 +36,22 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   /*u=+1*/
   double* result1=new double[3];
   std::complex<double> tempcomplex;
-  double resultplus=prod*smearing(freq,-(omega2-omega1),gaussian::smearing_hertz);
-  //std::cout<<prod<<" "<<smearing(freq,-(omega2-omega1),gaussian::smearing_ev)<<std::endl;
+  double resultplus=prod*smearing(freq,-(omega2-omega1),gaussian::smearing_ev);
   for(size_t i=0;i<3;i++){
-    tempcomplex=std::complex<double>(0,1.0)*(1.0)*sin(light::delta)*light::Ax*light::Az*(P12[0]*P21[2]-P21[0]*P12[2]);
-    result1[i]=resultplus*tempcomplex.real()*P11[i].real();
+    tempcomplex=(1.0)*sin(light::delta)*(P12[0]*P21[2]-P21[0]*P12[2]);
+    result1[i]=(resultplus*tempcomplex*P11[i]).imag();
   }
   /*u=-1*/
   double* result2=new double[3];
   resultplus=prod*smearing(freq,(omega2-omega1),gaussian::smearing_ev);
   for(size_t i=0;i<3;i++){
-    tempcomplex=std::complex<double>(0,1.0)*(-1.0)*sin(light::delta)*light::Ax*light::Az*(P12[0]*P21[2]-P21[0]*P12[2]);
-    result2[i]=resultplus*tempcomplex.real()*P11[i].real();
+    tempcomplex=(-1.0)*sin(light::delta)*(P12[0]*P21[2]-P21[0]*P12[2]);
+    result2[i]=(resultplus*tempcomplex*P11[i]).imag();
   }
   for(size_t i=0;i<3;i++){
-    result[i]=result1[i]+result2[i];
+    result[i]=-1*result1[i]-1*result2[i];
   }
+  //std::cout<<result[0]<<" "<<result[1]<<" "<<result[2]<<std::endl;
   delete [] result1;
   delete [] result2;
   delete [] P12;

@@ -87,7 +87,6 @@ void readkpoints(double** kpoints,double* kweight,int kpoints_count,double& volu
     ss>>useless;
     ss>>volume;
     volume=volume*sci_const::rbohr*sci_const::rbohr*sci_const::rbohr/sci_const::alat/sci_const::alat/sci_const::alat;
-    std::cout<<"the volume is: "<<volume<<std::endl;
     ss.clear();
     }
     if(temp.find("cart. coord. in units 2pi/alat")!=std::string::npos){

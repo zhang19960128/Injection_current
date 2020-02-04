@@ -26,5 +26,5 @@ double Az=Eamp/freq;/*SI units*/
 }
 namespace gaussian{
 double smearing_hertz=0.1*sci_const::ev2j/sci_const::hbar;
-double smearing_ev=0.1;/*ev*/
+double smearing_ev=0.3;/*ev*/
 }

@@ -17,6 +17,7 @@ extern double illumination;
 extern double delta;
 extern double mwpercmsq2E;
 extern double Eamp;
+extern double photonE;
 extern double freq;
 extern double Ax;
 extern double Ay;
