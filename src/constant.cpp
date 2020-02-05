@@ -27,5 +27,5 @@ double time=1e-13;/*1ps*/
 }
 namespace gaussian{
 double smearing_hertz=0.1*sci_const::ev2j/sci_const::hbar;
-double smearing_ev=0.2;/*ev*/
+double smearing_ev=0.1;/*ev*/
 }
