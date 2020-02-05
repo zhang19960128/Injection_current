@@ -4,21 +4,26 @@
 #include "indexref.h"
 #include <cmath>
 #include <complex>
-double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double* kweight,double freq){
+double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int kpoint_total,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double* kweight,double freq){
   /*Please refer to my OneNote math constant.*/
   double sci=(sci_const::e_q/sci_const::e_mass);
   sci=sci*sci*sci/sci_const::hbar/sci_const::hbar;
+  /*deal with the delta function*/
+  sci=sci*sci_const::hbar/sci_const::ev2j;
+  sci=sci*(-2*sci_const::PI);
   /*velocity matrix units*/
   sci=sci*(sci_const::hbar)*(sci_const::hbar)*(sci_const::hbar)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat);
   /*Integration over dk'*/
-  sci=sci*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)/volume;
-  double prod=sci/freq/freq/(sci_const::ev2j/sci_const::hbar)/(sci_const::ev2j/sci_const::hbar);
-  prod=sci_const::hbar*sci_const::ev2j*prod;/*this one is to convert the unit in delta function from w to ev to J*/
+  sci=sci/kpoint_total;
   /*Integration over dk''*/
-  prod=prod*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)/volume;
+  sci=sci/kpoint_total;
+  /*devided by the volume to get the density*/
+  sci=sci/(volume*sci_const::alat*sci_const::alat*sci_const::alat);
+  /*Changing the light A into E*/
+  double prod=sci/(sci_const::ev2j/sci_const::hbar)/(sci_const::ev2j/sci_const::hbar);
   /*time the band weight*/
-  prod=prod*kweight[kindex1];
-  prod=prod*(occupation[kindex1][bandnum1]-occupation[kindex2][bandnum2])*(-2)*sci_const::PI*light::time;
+  prod=prod*light::time;
+  prod=prod*(occupation[kindex1][bandnum1]-occupation[kindex2][bandnum2]);
   double omega1=bands[kindex1][bandnum1];
   double omega2=bands[kindex2][bandnum2];
   std::complex<double>* P11=new std::complex<double> [3];
@@ -79,7 +84,7 @@ double* sumbands(int kpointstotal,int bandstotal,double volume,std::complex<doub
     for(size_t j=0;j<bandstotal;j++){
     /*sum over n2*/
       for(size_t k=0;k<bandstotal;k++){
-          tempsum=bandot(i,i,j,k,volume,bandstotal,kpointsproduct,occupation,bands,kweight,freq);
+          tempsum=bandot(i,i,j,k,volume,kpointstotal,bandstotal,kpointsproduct,occupation,bands,kweight,freq);
           for(size_t m=0;m<3;m++){
             totalsum[m]=totalsum[m]+tempsum[m];
           }
