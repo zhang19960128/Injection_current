@@ -103,8 +103,28 @@ double* sumbands(int kpointstotal,int bandstotal,double volume,std::complex<doub
       }
     }
    }
-   MPI_Allreduce(totalsum,reducesum,3,MPI_DOUBLE,MPI_SUM,MPI_COMM_WORLD);
+   MPI_Reduce(totalsum,reducesum,3,MPI::DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
    return reducesum;
+}
+double searchbandgap(int kpointstotal,int bandstotal,double** occupation,double** bands){
+  int world_size,world_rank;
+  MPI_Comm_size(MPI_COMM_WORLD,&world_size);
+  MPI_Comm_rank(MPI_COMM_WORLD,&world_rank);
+  double gap,minigap,minigap_root;
+  gap=0.0;
+  minigap=1000.0;
+  for(int i=world_rank;i<kpointstotal;i=i+world_size){
+    for(size_t j=0;j<bandstotal-1;j++){
+      if((occupation[i][j]-occupation[i][j+1])>0.5){
+        gap=bands[i][j+1]-bands[i][j];
+      }
+    }
+    if(gap<minigap){
+      minigap=gap;
+    }
+  }
+  MPI_Reduce(&minigap,&minigap_root,1,MPI::DOUBLE,MPI_MIN,0,MPI_COMM_WORLD);
+  return minigap;
 }
 /*here the smearing represent the sigma, f(x)=1/(sqrt(2*PI)*sigma)*exp(-1/2*((x-center)/sigma)^2)*/
 double smearing(double input,double center,double smearing){
