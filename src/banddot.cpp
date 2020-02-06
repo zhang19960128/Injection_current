@@ -4,8 +4,12 @@
 #include "indexref.h"
 #include <cmath>
 #include <complex>
-double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int kpoint_total,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double* kweight,double freq){
+#include <mpi.h>
+double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int kpoint_total,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double freq){
   /*Please refer to my OneNote math constant.*/
+   int world_size,world_rank;
+   MPI_Comm_size(MPI_COMM_WORLD,&world_size);
+   MPI_Comm_rank(MPI_COMM_WORLD,&world_rank);
   double sci=(sci_const::e_q/sci_const::e_mass);
   sci=sci*sci*sci/sci_const::hbar/sci_const::hbar;
   /*deal with the delta function*/
@@ -37,6 +41,7 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   int tempindex;
   for(size_t i=0;i<3;i++){
      P11[i]=indexvmatrix(kindex1,bandnum1,bandnum1,bandtotal,i,kpoint_product);
+  
   }
   std::complex<double>* P12=new std::complex<double> [3];
   for(size_t i=0;i<3;i++){
@@ -54,6 +59,7 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
     tempcomplex=(1.0)*sin(light::delta)*(P12[0]*P21[2]-P21[0]*P12[2]);
     result1[i]=(resultplus*tempcomplex*P11[i]).imag();
   }
+
   /*u=-1*/
   double* result2=new double[3];
   resultplus=prod*smearing(freq,(omega2-omega1),gaussian::smearing_ev);
@@ -64,7 +70,7 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   for(size_t i=0;i<3;i++){
     result[i]=-1*result1[i]-1*result2[i];
   }
-  //std::cout<<result[0]<<" "<<result[1]<<" "<<result[2]<<std::endl;
+
   delete [] result1;
   delete [] result2;
   delete [] P12;
@@ -72,19 +78,24 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   delete [] P11;
   return result;
 }
-double* sumbands(int kpointstotal,int bandstotal,double volume,std::complex<double>*** kpointsproduct,double** occupation,double** bands,double* kweight,double freq){
+double* sumbands(int kpointstotal,int bandstotal,double volume,std::complex<double>*** kpointsproduct,double** occupation,double** bands,double freq){
    double* totalsum=new double[3];
+   double* reducesum=new double[3];
    for(size_t i=0;i<3;i++){
     totalsum[i]=0.0;
+    reducesum[i]=0.0;
    }
    double* tempsum;
+   int world_rank,world_size;
+   MPI_Comm_rank(MPI_COMM_WORLD,&world_rank);
+   MPI_Comm_size(MPI_COMM_WORLD,&world_size);
    /*sum over kpoints*/
-   for(size_t i=0;i<kpointstotal;i++){
+   for(int i=world_rank;i<kpointstotal;i=i+world_size){
     /*sum over n1*/
     for(size_t j=0;j<bandstotal;j++){
     /*sum over n2*/
       for(size_t k=0;k<bandstotal;k++){
-          tempsum=bandot(i,i,j,k,volume,kpointstotal,bandstotal,kpointsproduct,occupation,bands,kweight,freq);
+          tempsum=bandot(i,i,j,k,volume,kpointstotal,bandstotal,kpointsproduct,occupation,bands,freq);
           for(size_t m=0;m<3;m++){
             totalsum[m]=totalsum[m]+tempsum[m];
           }
@@ -92,7 +103,8 @@ double* sumbands(int kpointstotal,int bandstotal,double volume,std::complex<doub
       }
     }
    }
-   return totalsum;
+   MPI_Allreduce(totalsum,reducesum,3,MPI_DOUBLE,MPI_SUM,MPI_COMM_WORLD);
+   return reducesum;
 }
 /*here the smearing represent the sigma, f(x)=1/(sqrt(2*PI)*sigma)*exp(-1/2*((x-center)/sigma)^2)*/
 double smearing(double input,double center,double smearing){
