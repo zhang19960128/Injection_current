@@ -65,8 +65,8 @@ int main(){
   MPI_Bcast(kpoint_product,3*kpointscount*(bandnumber+1)*bandnumber/2,MPI::DOUBLE_COMPLEX,0,MPI_COMM_WORLD);
   double* current_rate;
   double bandgap=searchbandgap(kpointscount,bandnumber,occupation_array,bands_array);
-  bandgap=0.2;
-  for(double photonE=bandgap;photonE<bandgap+1.0;photonE=photonE+0.02){
+  bandgap=0.0;
+  for(double photonE=bandgap;photonE<bandgap+1.2;photonE=photonE+0.02){
   current_rate=sumbands(kpointscount,bandnumber,volume,kpoint_product_array,occupation_array,bands_array,photonE);
   MPI_Barrier(MPI_COMM_WORLD);
   if(world_rank==0){
