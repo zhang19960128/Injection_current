@@ -5,7 +5,7 @@
 #include <cmath>
 #include <complex>
 #include <mpi.h>
-double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int kpoint_total,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double freq){
+double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,int kpoint_total,int bandtotal,std::complex<double>*** kpoint_product,double** occupation,double** bands,double* kweight,double freq){
   /*Please refer to my OneNote math constant.*/
    int world_size,world_rank;
    MPI_Comm_size(MPI_COMM_WORLD,&world_size);
@@ -18,9 +18,9 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   /*velocity matrix units*/
   sci=sci*(sci_const::hbar)*(sci_const::hbar)*(sci_const::hbar)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat);
   /*Integration over dk'*/
-  sci=sci/kpoint_total;
+  sci=sci*kweight[kindex1];
   /*Integration over dk''*/
-  sci=sci/kpoint_total;
+  sci=sci*kweight[kindex2];
   /*devided by the volume to get the density*/
   sci=sci/(volume*sci_const::alat*sci_const::alat*sci_const::alat);
   /*Changing the light A into E*/
@@ -78,7 +78,7 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   delete [] P11;
   return result;
 }
-double* sumbands(int kpointstotal,int bandstotal,double volume,std::complex<double>*** kpointsproduct,double** occupation,double** bands,double freq){
+double* sumbands(int kpointstotal,int bandstotal,double volume,std::complex<double>*** kpointsproduct,double** occupation,double** bands,double* kweight,double freq){
    double* totalsum=new double[3];
    double* reducesum=new double[3];
    for(size_t i=0;i<3;i++){
@@ -95,7 +95,7 @@ double* sumbands(int kpointstotal,int bandstotal,double volume,std::complex<doub
     for(size_t j=0;j<bandstotal;j++){
     /*sum over n2*/
       for(size_t k=0;k<bandstotal;k++){
-          tempsum=bandot(i,i,j,k,volume,kpointstotal,bandstotal,kpointsproduct,occupation,bands,freq);
+          tempsum=bandot(i,i,j,k,volume,kpointstotal,bandstotal,kpointsproduct,occupation,bands,kweight,freq);
           for(size_t m=0;m<3;m++){
             totalsum[m]=totalsum[m]+tempsum[m];
           }

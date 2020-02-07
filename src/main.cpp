@@ -48,11 +48,18 @@ int main(){
   }
   double* kweight=new double [kpointscount];
   double volume;
+  double kweightsum=0.0;
   if(world_rank==0){
   readbands(bands_array,kpointscount,bandnumber,"out_nscf");
   readkpoints(kpoints_array,kweight,kpointscount,volume,"out_nscf");
   readoccupation(occupation_array,kpointscount,bandnumber,"out_nscf");
   readvmatrix(kpoint_product_array,kpointscount,bandnumber,"pmat.dat");
+  for(size_t i=0;i<kpointscount;i++){
+    kweightsum=kweightsum+kweight[i];
+  }
+  for(size_t i=0;i<kpointscount;i++){
+    kweight[i]=kweight[i]/kweightsum;
+  }
   }
   else{
   }
@@ -60,6 +67,7 @@ int main(){
   MPI_Bcast(&sci_const::alat,1,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(bands,kpointscount*bandnumber,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(kpoints,kpointscount*3,MPI::DOUBLE,0,MPI_COMM_WORLD);
+  MPI_Bcast(kweight,kpointscount,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(&volume,1,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(occupation,kpointscount*bandnumber,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(kpoint_product,3*kpointscount*(bandnumber+1)*bandnumber/2,MPI::DOUBLE_COMPLEX,0,MPI_COMM_WORLD);
@@ -67,7 +75,7 @@ int main(){
   double bandgap=searchbandgap(kpointscount,bandnumber,occupation_array,bands_array);
   bandgap=0.0;
   for(double photonE=bandgap;photonE<bandgap+1.2;photonE=photonE+0.02){
-  current_rate=sumbands(kpointscount,bandnumber,volume,kpoint_product_array,occupation_array,bands_array,photonE);
+  current_rate=sumbands(kpointscount,bandnumber,volume,kpoint_product_array,occupation_array,bands_array,kweight,photonE);
   MPI_Barrier(MPI_COMM_WORLD);
   if(world_rank==0){
   std::cout<<photonE-bandgap<<" "<<current_rate[0]<<" "<<current_rate[1]<<" "<<current_rate[2]<<std::endl;
