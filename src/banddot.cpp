@@ -18,7 +18,7 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   /*velocity matrix units*/
   sci=sci*(sci_const::hbar)*(sci_const::hbar)*(sci_const::hbar)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat)*(2*sci_const::PI/sci_const::alat);
   /*Integration over dk'*/
-  sci=sci/kpoint_total;//kweight[kindex1];
+  sci=sci;//kweight[kindex1];
   /*Integration over dk''*/
   sci=sci/kpoint_total;//kweight[kindex2];
   /*devided by the volume to get the density*/
