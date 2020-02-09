@@ -8,15 +8,45 @@
 #include "indexref.h"
 #include "banddot.h"
 #include <mpi.h>
-#include <fstream>
-int main(){
+#include <sstream>
+int main(int argc,char* argv[]){
   MPI_Init(NULL,NULL);
   int world_size,world_rank;
   MPI_Comm_size(MPI_COMM_WORLD,&world_size);
   MPI_Comm_rank(MPI_COMM_WORLD,&world_rank);
+  std::fstream fs;
+  std::string temp;
+  std::string vmatrix;
+  std::string bandsfile;
+  std::string useless;
+  std::stringstream ss;
   int kpointscount,bandnumber;
   if(world_rank==0){
-  readdimension(kpointscount,bandnumber,"pmat.dat");
+  int kx,ky,kz;
+  fs.open(argv[1],std::fstream::in);
+  while(getline(fs,temp)){
+    if(temp.find("kmesh")!=std::string::npos){
+      ss.clear();
+      ss.str(temp);
+      ss>>useless;
+      ss>>kx;
+      ss>>ky;
+      ss>>kz;
+    }
+    if(temp.find("datafile")!=std::string::npos){
+      ss.clear();
+      ss.str(temp);
+      ss>>useless;
+      ss>>vmatrix;
+    }
+    if(temp.find("bands")!=std::string::npos){
+      ss.clear();
+      ss.str(temp);
+      ss>>useless;
+      ss>>bandsfile;
+    }
+  }
+  readdimension(kpointscount,bandnumber,vmatrix.c_str());
   }
   else{
   };
@@ -50,10 +80,10 @@ int main(){
   double volume;
   double kweightsum=0.0;
   if(world_rank==0){
-  readbands(bands_array,kpointscount,bandnumber,"out_nscf");
-  readkpoints(kpoints_array,kweight,kpointscount,volume,"out_nscf");
-  readoccupation(occupation_array,kpointscount,bandnumber,"out_nscf");
-  readvmatrix(kpoint_product_array,kpointscount,bandnumber,"pmat.dat");
+  readbands(bands_array,kpointscount,bandnumber,bandsfile.c_str());
+  readkpoints(kpoints_array,kweight,kpointscount,volume,bandsfile.c_str());
+  readoccupation(occupation_array,kpointscount,bandnumber,bandsfile.c_str());
+  readvmatrix(kpoint_product_array,kpointscount,bandnumber,vmatrix.c_str());
   for(size_t i=0;i<kpointscount;i++){
     kweightsum=kweightsum+kweight[i];
   }
