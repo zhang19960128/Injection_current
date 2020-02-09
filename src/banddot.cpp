@@ -10,7 +10,7 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
    int world_size,world_rank;
    MPI_Comm_size(MPI_COMM_WORLD,&world_size);
    MPI_Comm_rank(MPI_COMM_WORLD,&world_rank);
-  double sci=(sci_const::e_q/sci_const::e_mass)/4.0;
+  double sci=(sci_const::e_q/sci_const::e_mass);
   sci=sci*sci*sci/sci_const::hbar/sci_const::hbar;
   /*deal with the delta function*/
   sci=sci*sci_const::hbar/sci_const::ev2j;
