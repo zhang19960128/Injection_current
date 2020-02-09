@@ -11,6 +11,9 @@ extern double rootpi;
 extern double ev2j;
 extern double hztocm;
 extern double alat;
+extern int kx;
+extern int ky;
+extern int kz;
 }
 namespace light{
 extern double illumination;

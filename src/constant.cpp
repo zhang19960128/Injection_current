@@ -10,6 +10,9 @@ double rootpi=1.77245385091;
 double ev2j=1.60218*1e-19;
 double hztocm=2.9*1e10;
 double alat;
+int kx;
+int ky;
+int kz;
 }
 namespace light{
 double illumination=0.5;/*mw/cm^2*/

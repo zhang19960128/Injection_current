@@ -22,16 +22,15 @@ int main(int argc,char* argv[]){
   std::stringstream ss;
   int kpointscount,bandnumber;
   if(world_rank==0){
-  int kx,ky,kz;
   fs.open(argv[1],std::fstream::in);
   while(getline(fs,temp)){
     if(temp.find("kmesh")!=std::string::npos){
       ss.clear();
       ss.str(temp);
       ss>>useless;
-      ss>>kx;
-      ss>>ky;
-      ss>>kz;
+      ss>>sci_const::kx;
+      ss>>sci_const::ky;
+      ss>>sci_const::kz;
     }
     if(temp.find("datafile")!=std::string::npos){
       ss.clear();
@@ -52,6 +51,9 @@ int main(int argc,char* argv[]){
   };
   MPI_Barrier(MPI_COMM_WORLD);
   MPI_Bcast(&kpointscount,1,MPI::INT,0,MPI_COMM_WORLD);
+  MPI_Bcast(&sci_const::kx,1,MPI::INT,0,MPI_COMM_WORLD);
+  MPI_Bcast(&sci_const::ky,1,MPI::INT,0,MPI_COMM_WORLD);
+  MPI_Bcast(&sci_const::kz,1,MPI::INT,0,MPI_COMM_WORLD)
   MPI_Bcast(&bandnumber,1,MPI::INT,0,MPI_COMM_WORLD);
   std::complex<double>* kpoint_product=new std::complex<double> [3*kpointscount*bandnumber*(bandnumber+1)/2];
   std::complex<double>*** kpoint_product_array=new std::complex<double>** [3];
