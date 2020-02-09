@@ -20,7 +20,7 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   /*Integration over dk'*/
   sci=sci;//kweight[kindex1];
   /*Integration over dk''*/
-  sci=sci/kpoint_total;//kweight[kindex2];
+  sci=sci*kweight[kindex2];//kweight[kindex2];
   /*devided by the volume to get the density*/
   sci=sci/(volume*sci_const::alat*sci_const::alat*sci_const::alat);
   /*Changing the light A into E*/
