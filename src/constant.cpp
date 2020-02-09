@@ -23,7 +23,7 @@ double freq=photonE*sci_const::ev2j/sci_const::hbar;/*SI units*/
 double Ax=Eamp/freq;/*SI units*/
 double Ay=0;
 double Az=Eamp/freq;/*SI units*/
-double time=-1e-13;/*1ps*/
+double time=-1e-14;/*1ps*/
 }
 namespace gaussian{
 double smearing_hertz=0.1*sci_const::ev2j/sci_const::hbar;
