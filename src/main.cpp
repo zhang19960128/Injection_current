@@ -53,7 +53,7 @@ int main(int argc,char* argv[]){
   MPI_Bcast(&kpointscount,1,MPI::INT,0,MPI_COMM_WORLD);
   MPI_Bcast(&sci_const::kx,1,MPI::INT,0,MPI_COMM_WORLD);
   MPI_Bcast(&sci_const::ky,1,MPI::INT,0,MPI_COMM_WORLD);
-  MPI_Bcast(&sci_const::kz,1,MPI::INT,0,MPI_COMM_WORLD)
+  MPI_Bcast(&sci_const::kz,1,MPI::INT,0,MPI_COMM_WORLD);
   MPI_Bcast(&bandnumber,1,MPI::INT,0,MPI_COMM_WORLD);
   std::complex<double>* kpoint_product=new std::complex<double> [3*kpointscount*bandnumber*(bandnumber+1)/2];
   std::complex<double>*** kpoint_product_array=new std::complex<double>** [3];
