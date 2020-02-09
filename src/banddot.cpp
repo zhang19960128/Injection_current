@@ -24,7 +24,7 @@ double* bandot(int kindex1,int kindex2,int bandnum1,int bandnum2,double volume,i
   /*devided by the volume to get the density*/
   sci=sci/(volume*sci_const::alat*sci_const::alat*sci_const::alat);
   /*Changing the light A into E*/
-  double prod=sci/(sci_const::ev2j/sci_const::hbar)/(sci_const::ev2j/sci_const::hbar);
+  double prod=sci/(sci_const::ev2j/sci_const::hbar)/(sci_const::ev2j/sci_const::hbar)/4.0;
   /*time the band weight*/
   prod=prod*light::time;
   prod=prod*(occupation[kindex1][bandnum1]-occupation[kindex2][bandnum2]);
