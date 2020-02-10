@@ -9,4 +9,4 @@ legend("xxz","yxz","zxz")
 xlabel("Photon Energy(ev)");
 ylabel("Susceptibility($\mu$A/$V^{2}$)",'Interpreter','latex')
 set(gca,"FontSize",26)
-saveas(gcf,'BTO.eps','epsc')
+saveas(gcf,'RhSi.eps','epsc')
