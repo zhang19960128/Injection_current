@@ -7,6 +7,7 @@ figure('units','normalized','outerposition',[0 0 1 1])
 plot(xgrid,xxz,'-r+',xgrid,yxz,'-kp',xgrid,zxz,'-m+','LineWidth',2)
 legend("xxz","yxz","zxz")
 xlabel("Photon Energy(ev)");
+xlim([0.2,1.2])
 ylabel("Susceptibility($\mu$A/$V^{2}$)",'Interpreter','latex')
 set(gca,"FontSize",26)
 saveas(gcf,'RhSi.eps','epsc')
