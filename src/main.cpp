@@ -46,6 +46,7 @@ int main(int argc,char* argv[]){
     }
   }
   readdimension(kpointscount,bandnumber,vmatrix.c_str());
+  fs.close();
   }
   else{
   };
@@ -105,12 +106,18 @@ int main(int argc,char* argv[]){
   MPI_Bcast(kpoint_product,3*kpointscount*(bandnumber+1)*bandnumber/2,MPI::DOUBLE_COMPLEX,0,MPI_COMM_WORLD);
   double* current_rate;
   double bandgap=searchbandgap(kpointscount,bandnumber,occupation_array,bands_array);
+  if(world_rank==0){
+    fs.open("spectrum.dat",std::fstream::out);
+  }
   for(double photonE=bandgap;photonE<bandgap+1.2;photonE=photonE+0.02){
   current_rate=sumbands(kpointscount,bandnumber,volume,kpoint_product_array,occupation_array,bands_array,kweight,photonE);
   MPI_Barrier(MPI_COMM_WORLD);
   if(world_rank==0){
-  std::cout<<photonE-bandgap<<" "<<current_rate[0]<<" "<<current_rate[1]<<" "<<current_rate[2]<<std::endl;
+  fs<<photonE-bandgap<<" "<<current_rate[0]<<" "<<current_rate[1]<<" "<<current_rate[2]<<std::endl;
   }
+  }
+  if(world_rank==0){
+    fs.close();
   }
   /*deallocate one dimensional array*/
   delete [] bands;
