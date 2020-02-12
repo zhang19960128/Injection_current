@@ -117,7 +117,7 @@ int main(int argc,char* argv[]){
   }
   }
   if(world_rank==0){
-    fs.close();
+  fs.close();
   }
   /*deallocate one dimensional array*/
   delete [] bands;
