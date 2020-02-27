@@ -106,6 +106,7 @@ int main(int argc,char* argv[]){
   MPI_Bcast(kpoint_product,3*kpointscount*(bandnumber+1)*bandnumber/2,MPI::DOUBLE_COMPLEX,0,MPI_COMM_WORLD);
   double* current_rate;
   double bandgap=searchbandgap(kpointscount,bandnumber,occupation_array,bands_array);
+  std::cout<<"I am here 1 "<<std::endl;
   if(world_rank==0){
     fs.open("spectrum.dat",std::fstream::out);
   }
@@ -119,21 +120,22 @@ int main(int argc,char* argv[]){
   if(world_rank==0){
   fs.close();
   }
+  std::cout<<"I am here 2 "<<std::endl;
   /*deallocate one dimensional array*/
-  delete [] bands;
   delete [] kpoints;
   delete [] occupation;
+  delete [] bands;
   delete [] kpoint_product;
-  /*deallocate memory*/
-  for(size_t i=0;i<kpointscount;i++){
-    delete [] bands_array[i];
-    delete [] occupation_array[i];
-  }
-  delete [] bands_array;
-  delete [] occupation_array;
-  for(size_t i=0;i<3;i++){
-      delete [] kpoint_product_array[i];
-  }
+//  /*deallocate memory*/
+//  for(size_t i=0;i<kpointscount;i++){
+//    delete [] bands_array[i];
+//    delete [] occupation_array[i];
+//  }
+ delete [] bands_array;
+ delete [] occupation_array;
+ for(size_t i=0;i<3;i++){
+     delete [] kpoint_product_array[i];
+ }
   delete [] kpoint_product_array;
   MPI_Finalize();
 }
