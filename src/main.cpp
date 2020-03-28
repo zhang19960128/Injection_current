@@ -99,14 +99,28 @@ int main(int argc,char* argv[]){
   MPI_Barrier(MPI_COMM_WORLD);
   MPI_Bcast(&sci_const::alat,1,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(bands,kpointscount*bandnumber,MPI::DOUBLE,0,MPI_COMM_WORLD);
+//  fs.open(("bands"+std::to_string(world_rank)).c_str(),std::fstream::out);
+//  for(size_t i=0;i<kpointscount*bandnumber;i++){
+//    fs<<bands[i]<<std::endl;
+//  }
+//  fs.close();
   MPI_Bcast(kpoints,kpointscount*3,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(kweight,kpointscount,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(&volume,1,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(occupation,kpointscount*bandnumber,MPI::DOUBLE,0,MPI_COMM_WORLD);
   MPI_Bcast(kpoint_product,3*kpointscount*(bandnumber+1)*bandnumber/2,MPI::DOUBLE_COMPLEX,0,MPI_COMM_WORLD);
+//  fs.open(("kpoint_product"+std::to_string(world_rank)).c_str(),std::fstream::out);
+//  for(size_t i=0;i<kpointscount;i++){
+//    for(size_t j=0;j<(bandnumber+1)*bandnumber/2;j++){
+//      for(size_t k=0;k<3;k++){
+//        fs<<kpoint_product_array[k][i][j]<<" ";
+//      }
+//        fs<<std::endl;
+//    }
+//  }
+//  fs.close();
   double* current_rate;
   double bandgap=searchbandgap(kpointscount,bandnumber,occupation_array,bands_array);
-  std::cout<<"I am here 1 "<<std::endl;
   if(world_rank==0){
     fs.open("spectrum.dat",std::fstream::out);
   }

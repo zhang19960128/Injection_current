@@ -123,8 +123,8 @@ double searchbandgap(int kpointstotal,int bandstotal,double** occupation,double*
       minigap=gap;
     }
   }
-  MPI_Reduce(&minigap,&minigap_root,1,MPI::DOUBLE,MPI_MIN,0,MPI_COMM_WORLD);
-  return minigap;
+  MPI_Allreduce(&minigap,&minigap_root,1,MPI::DOUBLE,MPI_MIN,MPI_COMM_WORLD);
+  return minigap_root;
 }
 /*here the smearing represent the sigma, f(x)=1/(sqrt(2*PI)*sigma)*exp(-1/2*((x-center)/sigma)^2)*/
 double smearing(double input,double center,double smearing){
